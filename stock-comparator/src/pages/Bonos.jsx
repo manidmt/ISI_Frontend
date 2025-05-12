@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 
 export default function ComparadorBonos() {
+
   const [countries, setCountries] = useState('');
   const [bonds, setBonds] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -9,13 +10,16 @@ export default function ComparadorBonos() {
 
   
   const fetchBondData = async () => {
+
     if (!countries.trim()) return;
     setLoading(true);
     setError(null);
 
+    const formattedCountry = countries.trim().toUpperCase();
+
     try {
       const response = await axios.get(
-        `http://localhost:5000/bonds/compare?countries=${countries}`
+        `http://localhost:5000/bonds/${formattedCountry}`
       );
       setBonds(response.data);
     } catch (err) {
@@ -37,7 +41,7 @@ export default function ComparadorBonos() {
 
           <input
             type="text"
-            placeholder="Ejemplo: SPAIN,USA,FRANCE"
+            placeholder="Ejemplo: SPAIN, U.S.,FRANCE"
             value={countries}
             onChange={(e) => setCountries(e.target.value)}
             className="campo-texto"
@@ -67,7 +71,7 @@ export default function ComparadorBonos() {
                   <th>País</th>
                   <th>Precio</th>
                   <th>Cupón</th>
-                  <th>1 Año</th>
+                  {/*<th>1 Año</th>*/}
                   <th>Rango diario</th>
                   <th>Rango anual</th>
                 </tr>
@@ -79,9 +83,9 @@ export default function ComparadorBonos() {
                     <td>{bond.country}</td>
                     <td>{bond.price ?? '-'}</td>
                     <td>{bond.coupon ?? '-'}</td>
-                    <td className={bond.one_year_change >= 0 ? 'positivo' : 'negativo'}>
+                    {/*<td className={bond.one_year_change >= 0 ? 'positivo' : 'negativo'}>
                       {(bond.one_year_change > 0 ? '+' : '') + bond.one_year_change}%
-                    </td>
+                    </td>*/}
                     <td>{bond.day_range}</td>
                     <td>{bond.year_range}</td>
                   </tr>

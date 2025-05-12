@@ -10,7 +10,7 @@ export default function Inicio() {
     MSFT: "Microsoft Corporation",
     TSLA: "Tesla, Inc."
   };
-  const paises = ['SPAIN', 'FRANCE', 'USA'];
+  const paises = ['SPAIN'];
 
   
   useEffect(() => {
@@ -69,6 +69,7 @@ export default function Inicio() {
             {stocks.length > 0 && (
 
               <table className="tabla">
+
                 <thead>
                   <tr>
                     <th>Nombre</th>
@@ -77,6 +78,7 @@ export default function Inicio() {
                     <th>Variación</th>
                   </tr>
                 </thead>
+                
                 <tbody>
                   {stocks.map((stock) => (
                     <tr key={stock.symbol}>
@@ -89,35 +91,43 @@ export default function Inicio() {
                     </tr>
                   ))}
                 </tbody>
+              
               </table>
             )}
 
             </div>
 
             <div className="tarjeta">
-              <h2>Bonos Principales</h2>
+              
+              <h2> Bonos Principales </h2>
+              
               <table className="tabla">
+              
                 <thead>
                   <tr>
                     <th>Nombre</th>
-                    <th>Precio</th>
                     <th>Cupón</th>
-                    <th>1 Año</th>
+                    <th>Rango Anual</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {bonds.map((bond, i) => (
-                    <tr key={i}>
-                      <td>{bond.name}</td>
-                      <td>{bond.price ?? '-'}</td>
-                      <td>{bond.coupon ?? '-'}</td>
-                      <td className={bond.one_year_change >= 0 ? 'positivo' : 'negativo'}>
-                        {(bond.one_year_change > 0 ? '+' : '') + bond.one_year_change + '%'}
-                      </td>
-                    </tr>
+                  {bonds
+                    .filter(bond =>
+                      bond.name === 'Spain 1-Year Bond Yield' ||
+                      bond.name === 'Spain 10-Year Bond Yield' ||
+                      bond.name === 'Spain 20-Year Bond Yield'
+                    )
+                    .map((bond, i) => (
+                      <tr key={i}>
+                        <td>{bond.name}</td>
+                        <td>{bond.coupon ?? '-'}</td>
+                        <td>{bond.year_range ?? '-'}</td>
+                      </tr>
                   ))}
                 </tbody>
+
               </table>
+            
             </div>
 
         </div>

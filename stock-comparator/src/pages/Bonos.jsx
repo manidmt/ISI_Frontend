@@ -53,6 +53,7 @@ export default function ComparadorBonos() {
             disabled={loading}
           >
             {loading ? 'Consultando...' : 'Comparar'}
+            
           </button>
 
         </div>

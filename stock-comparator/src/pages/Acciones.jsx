@@ -9,6 +9,7 @@ export default function ComparadorAcciones() {
   const [hoveredSymbol, setHoveredSymbol] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [companyError, setCompanyError] = useState(null);
 
   const fetchStockData = async () => {
     
@@ -31,23 +32,30 @@ export default function ComparadorAcciones() {
     }
   };
 
-  const fetchCompanyData = async () => {
+  const fetchCompanyData = async (symbol) => {
+    
+    if (companyData[symbol]) return;
+
     try {
 
+      
       const response = await axios.get(
-        `http://localhost:5000/stock?symbols=${symbols}`
+        `http://localhost:5000/company/${symbol}`
       );
 
-      const data = {};
-      response.data.forEach(company => {
-        data[company.symbol] = company;
-      });
-
-      setCompanyData(data);
-
-    } catch (err) {
-      console.error('Error al obtener los datos de empresa');
+      // Actualiza el contenido de companyData
+      // Añade la clave symbol asignándole response.data
+      setCompanyData(prev => ({
+        ...prev,
+        [symbol]: response.data
+      }));
+    } 
+    
+    catch (err) {
+      setCompanyError(`Error al obtener datos de empresa para ${symbol}`);
+      console.error(err);
     }
+
   };
 
 
@@ -100,8 +108,12 @@ export default function ComparadorAcciones() {
                 <tbody>
                   {stocks.map((stock) => (
                     <tr key={stock.symbol}>
-                      <td className="celda-simbolo"
-                        onMouseEnter={() => setHoveredSymbol(stock.symbol)}
+                      <td
+                        className="celda-simbolo"
+                        onMouseEnter={() => {
+                          setHoveredSymbol(stock.symbol);
+                          fetchCompanyData(stock.symbol);
+                        }}
                         onMouseLeave={() => setHoveredSymbol(null)}
                       >
                         {stock.symbol}

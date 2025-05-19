@@ -19,8 +19,14 @@ export default function ComparadorAcciones() {
 
     try {
 
+      const cleanedSymbols = symbols
+        .split(',')
+        .map(s => s.trim())
+        .filter(s => s.length > 0)
+        .join(',');
+
       const response = await axios.get(
-        `http://localhost:5000/stock/compare?symbols=${symbols}`
+        `http://localhost:5000/stock/compare?symbols=${cleanedSymbols}`
       );
 
       setStocks(response.data);
